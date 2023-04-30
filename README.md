@@ -1,3 +1,31 @@
+# DRF API to scrap Yahoo finance data
+
+This api scrap tickets data from Yahoo finance on the basis of Company and date range and returns `Date`, `Open`, `Close` and `Volume`.
+
+This API use `BeautifulSoup` in backend to scrap data from web.
+
+## Install
+
+    # create virtual enviorment
+    python -m venv venv
+    # activate virtual enviorment (Linux/Macox)
+    source venv/bin/activate
+    pip install -r requirement.txt
+
+## Migrations
+    python manage.py makemigrations
+    python manage.py migrate
+
+## To Bulk load data
+      python manage.py bulk_import [company] [start_date] [end_date]
+## Run the app
+
+    python manage.py runserver
+
+## Run the tests
+
+    ./manage.py test --pattern="*_test.py"
+
 ## API Reference
 
 #### Get all companies
