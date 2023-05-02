@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 from .models import Company, StockPrice
 from .serializers import CompanySerializer, StockPriceSerializer
@@ -12,7 +13,7 @@ from .serializers import CompanySerializer, StockPriceSerializer
 @permission_classes([IsAuthenticated])
 def company(request, company_name=None):
     """
-    Perform CRUD operations on a Company object.
+    Perform CRUD operations on a Company.
 
     :param request: The incoming HTTP request.
     :type request: django.http.HttpRequest
@@ -38,7 +39,8 @@ def company(request, company_name=None):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == "PUT":
-        serializer = CompanySerializer(data=request.data)
+        object = get_object_or_404(Company, company=company_name)
+        serializer = CompanySerializer(data=request.data, instance=object)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -78,7 +80,7 @@ def company_details(request, company_name=None):
                 {"message": f"Company with name: {company_name} not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        serializer = CompanySerializer(company, many=True)
+        serializer = CompanySerializer(company)
         return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -94,11 +96,12 @@ def add_stock(request):
     Response: A Response object containing the serialized data of the new stock record if it is created successfully,
      or a Response object containing the errors and a status code of 400 if the data is invalid.
     """
-
+    company_name = request.data.get('company')
     if request.method == "POST":
         serializer = StockPriceSerializer(data=request.data)
+        company = get_object_or_404(Company, company=company_name)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(company=company)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -126,8 +129,7 @@ def list_stocks(request, company, start_date, end_date):
     paginator.page_size = 10
     try:
         stocks = StockPrice.objects.filter(
-            company__company=company, date__range=[start_date, end_date]
-        )
+            company__company=company)
     except:
         return Response(
             {"message": f"Company with name: {company} not found"},

@@ -8,7 +8,7 @@ app_name = "us_stocks"
 
 urlpatterns = [
     path("company/", views.company, name="company"),
-    path("company/<str:company_name>/", views.company, name="company_delete"),
+    path("company/<str:company_name>/", views.company, name="company_update_delete"),
     path(
         "company-details/<str:company_name>",
         views.company_details,
