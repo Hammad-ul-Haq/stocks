@@ -4,9 +4,19 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-
+from django.http.response import HttpResponse
+import markdown
 from .models import Company, StockPrice
 from .serializers import CompanySerializer, StockPriceSerializer
+import  os
+
+def api_overview(request):
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'README.md'), 'r') as f:
+        readme_md = f.read()
+        readme_html = markdown.markdown(readme_md, extensions=['markdown.extensions.fenced_code',
+                                                               'markdown.extensions.tables','markdown.extensions.abbr',
+                                                               'markdown.extensions.md_in_html'])
+    return HttpResponse( readme_html)
 
 
 @api_view(["GET", "POST", "PUT", "DELETE"])

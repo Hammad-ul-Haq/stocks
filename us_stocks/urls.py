@@ -7,6 +7,7 @@ from . import views
 app_name = "us_stocks"
 
 urlpatterns = [
+    path('', views.api_overview, name = 'api-overview'),
     path("company/", views.company, name="company"),
     path("company/<str:company_name>/", views.company, name="company_update_delete"),
     path(
