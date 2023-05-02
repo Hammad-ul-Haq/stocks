@@ -40,4 +40,5 @@ sqlparse==0.4.4
 tzdata==2023.3
 urllib3==1.26.15
 webencodings==0.5.1
-yfinance==0.2.18
+Markdown==3.4.3
+

@@ -1,10 +1,20 @@
-# DRF API to scrap Yahoo finance data
+# Yahoo financial Ticket Data Scraper API
 
-This api scrap tickets data from Yahoo finance on the basis of Company and date range and returns `Date`, `Open`, `Close` and `Volume`.
+This is an API that allows you to scrape ticket data from Yahoo Finance based on a company and a date range. 
+The API returns the Date, Open, Close, and Volume data for the specified company during the specified date range.
 
-This API use `BeautifulSoup` in backend to scrap data from web.
+## How it works
+The API uses BeautifulSoup in the backend to scrape data from the Yahoo Finance website. When a request is made to the 
+API with a specific company and date range, the API sends a request to the Yahoo Finance website and scrapes the 
+necessary data using BeautifulSoup. The scraped data is then returned to the client in the form of a JSON response.
 
-## Install
+## Requirements
+- Python 3.11
+- Django 4.2
+- BeautifulSoup4
+- 
+## Installation
+To install the required packages, you can run the following command:
 
     # create virtual enviorment
     python -m venv venv
@@ -13,20 +23,47 @@ This API use `BeautifulSoup` in backend to scrap data from web.
     pip install -r requirement.txt
 
 ## Migrations
+Before running the API, you need to apply the migrations to create the database tables. 
+You can do this by running the following commands:
+
     python manage.py makemigrations
     python manage.py migrate
 
 ## To Bulk load data
+
+To load data in bulk, you can use the bulk_import command provided by the API. The command takes three arguments: 
+the company ticker symbol, the start date of the date range, and the end date of the date range. For example, 
+to load data for Apple Inc. (AAPL) between 1-12-2022 and 1-31 2022, you can run the following command:
+
       python manage.py bulk_import [company] [start_date] [end_date]
+
+Note that this command will take some time to execute
+
 ## Run the app
+
+To start the API server locally, you can run the following command:
 
     python manage.py runserver
 
 ## Run the tests
 
+To run the tests, you can use the following command:
+
     ./manage.py test --pattern="*_test.py"
 
+This will run all the tests that match the pattern *_test.py.
+
 ## API Reference
+
+#### Generate token
+Pass `username` and `password` to generate token
+
+
+```http
+  POST /us_stocks/token/
+```
+
+<img width="1355" alt="Screen Shot 2023-05-02 at 1 03 25 PM" src="https://user-images.githubusercontent.com/52544737/235612353-e18a0340-a98a-4af5-9c29-84fa0ee40e8c.png">
 
 #### Get all companies
 
